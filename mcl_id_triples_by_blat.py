@@ -20,12 +20,12 @@ min_space_on_scratch = 100000 #in mb; fail if less than this amount of free spac
 
 def splitpath_rec(path, maxdepth=20):
     ( head, tail ) = os.path.split(path)
+
     # make it work on python 2.6
     if maxdepth and head and head != path:
-        return splitpath_rec(head, maxdepth - 1) + [ tail ]
+        return splitpath_rec(head, maxdepth - 1) + [ tail ] 
     else:
         return [ head or tail ]
-
 
 def splitpath(path):
     pathli = splitpath_rec(path)
@@ -37,11 +37,15 @@ def splitpath(path):
 def space_free_on_volume(vol,unit='M',verbose=False):
     '''returns free space on the specified volume in units <unit>
     '''
+
+    # The checking for space is wonky, just return that there's enough
+    return numpy.inf
+
     from subprocess import Popen,PIPE
     if verbose:
         print >> sys.stderr, 'checking free space on volume %s ...' % vol,
     try:
-        free = int(Popen('df -P --sync -B %s %s' % (unit,vol), shell=True, stdout=PIPE).stdout.readlines()[-1].strip().split()[3].rstrip(unit))
+        free = int(Popen('df -P -B %s %s' % (unit,vol), shell=True, stdout=PIPE).stdout.readlines()[-1].strip().split()[3].rstrip(unit))
     except:
         print >> sys.stderr, 'free space check failed; proceeding.  MONITOR AVAILABLE SPACE ON %s' % vol
         free = numpy.inf
