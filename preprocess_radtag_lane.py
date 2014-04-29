@@ -885,6 +885,6 @@ if __name__ == '__main__':
         #ret = os.system(os.path.join(RTDROOT,'summarize_sequencing_stats.py %s > %s.stats' % (outfile,outfile)))
 
         if opts.estimate_error:
-            os.system(os.path.join(RTDROOT,'estimate_error_by_clustering.py %s %s %s %s %s %s %s' % (outfile, opts.cutsite, opts.est_err_engine, opts.est_err_cores, opts.est_err_parts, opts.est_err_threads, opts.est_err_radius)))
+            os.system('%s %s %s %s %s %s %s %s %s' % (sys.executable, os.path.join(RTDROOT,'estimate_error_by_clustering.py'),outfile, opts.cutsite, opts.est_err_engine, opts.est_err_cores, opts.est_err_parts, opts.est_err_threads, opts.est_err_radius))
     
     #done

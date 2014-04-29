@@ -319,7 +319,7 @@ if __name__ == '__main__':
             write_sam_from_aln(this_cl,cl_aln,rg_dict,samheader_fh,sambody_fh,ref_fh)
 
     clstats_fh.close()
-    os.system(os.path.join(RTDROOT,'plot_error.py %s > %s' % (fbase+'.clstats',fbase+'.clstats.cdest' )))
+    os.system('%s %s %s > %s' % (sys.executable, os.path.join(RTDROOT,'plot_error.py'), fbase+'.clstats',fbase+'.clstats.cdest' ))
     
     #finish headers (@RG lines)
     if not opts.calc_only:

@@ -17,7 +17,7 @@ def safe_script(cmd,donefile,donesuffix='.done',scriptfile=None,force_write=Fals
         ret = os.system('chmod +x %s' % scriptfile)
         if ret != 0:
             raise OSError, 'cannot set execute for %s' % scriptfile
-    return 'run_safe.py \"%s\" %s' % (scriptfile,donefile+donesuffix)
+    return '%s run_safe.py \"%s\" %s' % (sys.executable, scriptfile,donefile+donesuffix)
                                
 def unfinished_cmds(to_run_dict,finished_ext='.done'):
     cmds = []

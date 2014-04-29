@@ -260,7 +260,7 @@ def run_lsf_blat(subjects,queries,blattile,blatargstr='',num_batches=100,queue='
             labf.append(outbase+'.label.gz')
             # ESCAPES UNNECESSARY WITH safe_script  
             #cmds.append('%smcl_id_triples_by_blat.py %s %s \\"%s\\" %s' % (radtag_denovo,subject,q,blatargstr,outbase))
-            cmd = '%smcl_id_triples_by_blat.py %s %s "%s" %s' % (radtag_denovo,subject,q,blatargstr,outbase)
+            cmd = '%s %s %s %s "%s" %s' % (sys.executable, os.path.join(radtag_denovo, 'mcl_id_triples_by_blat.py'),subject,q,blatargstr,outbase)
             to_run_dict[outbase] = run_safe.safe_script(cmd,outbase)
 
 
@@ -304,7 +304,7 @@ def run_local_blat(subjects,queries,blattile,blatargstr='',num_cores=1):
             subjname = os.path.basename(subject).rstrip('.fa').rstrip('_subj')
             outbase = q.rstrip('.fa').rstrip('_query')+'_blat'+'-subj'+subjname+blatargstr.replace('=','').replace(' ','')
             labf.append(outbase+'.label.gz')
-            cmd = '%smcl_id_triples_by_blat.py %s %s "%s" %s' % (radtag_denovo,subject,q,blatargstr,outbase)
+            cmd = '%s %s %s %s "%s" %s' % (sys.executable, os.path.join(radtag_denovo, 'mcl_id_triples_by_blat.py'),subject,q,blatargstr,outbase)
             cmds.append(run_safe.safe_script(cmd,outbase))
 
     shscr = os.path.join(os.path.dirname(subjects[0]) , 'runblat.sh')
@@ -331,7 +331,7 @@ def run_parallel_blat(subjects,queries,blattile,blatargstr='',num_cores='+0'):
             subjname = os.path.basename(subject).rstrip('.fa').rstrip('_subj')
             outbase = q.rstrip('.fa').rstrip('_query')+'_blat'+'-subj'+subjname+blatargstr.replace('=','').replace(' ','')
             labf.append(outbase+'.label.gz')
-            cmd = '%smcl_id_triples_by_blat.py %s %s "%s" %s' % (radtag_denovo,subject,q,blatargstr,outbase)
+            cmd = '%s %s %s %s "%s" %s' % (sys.executable, os.path.join(radtag_denovo, 'mcl_id_triples_by_blat.py'),subject,q,blatargstr,outbase)
             cmds.append(run_safe.safe_script(cmd,outbase))
 
     shscr = os.path.join(os.path.dirname(subjects[0]) , 'runblat.sh')
@@ -569,7 +569,7 @@ if __name__ == '__main__':
             print >> sys.stderr, '%s present, using' % (grfile)
         # make cluni
         print >> sys.stderr, 'merge uniqued and clustering data'
-        ret = os.system('%sget_uniqued_lines_by_cluster.py %s %s %s | sort -n > %s' % (radtag_denovo,grfile,tabfile,' '.join(infiles),clunifile))
+        ret = os.system('%s %s %s %s %s | sort -n > %s' % (sys.executable, os.path.join(radtag_denovo,'get_uniqued_lines_by_cluster.py'),grfile,tabfile,' '.join(infiles),clunifile))
         if ret != 0:
             raise OSError, 'get_uniqued_lines_by_cluster.py failed with code %s' % ret
     else:
@@ -611,8 +611,8 @@ if __name__ == '__main__':
     else:
         readlen = 0
     if opts.cluster_stats_only:
-        cmd = '%ssam_from_clust_uniqued.py -d %s -i %s -k %s -l %s %s -cs %s %s' % (radtag_denovo,opts.clustdirt,opts.minindiv,opts.keepseqs,readlen,(opts.skip_errors and '-s' or ''),clunifile,sambase)
+        cmd = '%s %s -d %s -i %s -k %s -l %s %s -cs %s %s' % (sys.executable, os.path.join(radtag_denovo,'sam_from_clust_uniqued.py'), opts.clustdirt,opts.minindiv,opts.keepseqs,readlen,(opts.skip_errors and '-s' or ''),clunifile,sambase)
     else:
-        cmd = '%ssam_from_clust_uniqued.py -d %s -i %s -k %s -l %s %s %s %s' % (radtag_denovo,opts.clustdirt,opts.minindiv,opts.keepseqs,readlen,(opts.skip_errors and '-s' or ''),clunifile,sambase)
+        cmd = '%s %s -d %s -i %s -k %s -l %s %s %s %s' % (sys.executable, os.path.join(radtag_denovo, 'sam_from_clust_uniqued.py'),opts.clustdirt,opts.minindiv,opts.keepseqs,readlen,(opts.skip_errors and '-s' or ''),clunifile,sambase)
     print cmd
     os.system(cmd)
