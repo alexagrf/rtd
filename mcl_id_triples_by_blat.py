@@ -19,10 +19,13 @@ pct_id_cut = 0.8
 min_space_on_scratch = 100000 #in mb; fail if less than this amount of free space
 
 def splitpath_rec(path, maxdepth=20):
-     ( head, tail ) = os.path.split(path)
-     return splitpath_rec(head, maxdepth - 1) + [ tail ] \
-         if maxdepth and head and head != path \
-         else [ head or tail ]
+    ( head, tail ) = os.path.split(path)
+    # make it work on python 2.6
+    if maxdepth and head and head != path:
+        return splitpath_rec(head, maxdepth - 1) + [ tail ]
+    else:
+        return [ head or tail ]
+
 
 def splitpath(path):
     pathli = splitpath_rec(path)
