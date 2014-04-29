@@ -13,7 +13,7 @@ if __name__ == "__main__":
     readlen = readlen_from_uniqued(outfile)
     
     err_clust_root = outfile.rstrip('.gz') + '-rtd'
-    cmd = os.path.join(RTDROOT,'rtd_run.py --cleanup -pe %s -np %s -nc %s -I %s -te %s -s %s -cs %s %s' % (engine,parts, cores, radius, threads, cutsite, err_clust_root, outfile))
+    cmd = '%s %s --cleanup -pe %s -np %s -nc %s -I %s -te %s -s %s -cs %s %s' % (sys.executable, os.path.join(RTDROOT,'rtd_run.py'), engine,parts, cores, radius, threads, cutsite, err_clust_root, outfile)
     print >> sys.stderr, cmd
     ret = os.system(cmd)
     if ret != 0:
