@@ -27,7 +27,7 @@ from collections import defaultdict
 from subprocess import Popen, PIPE
 from editdist import distance
 from glob import glob
-from config import EMAIL,PASS,SOURCE,LIBRARY_DATA,ADAPTER_DATA,RTDROOT
+from config import EMAIL,SOURCE,LIBRARY_DATA,ADAPTER_DATA,RTDROOT
 
 def dezip(values_in):
     '''opposite of zip(), i.e. 
@@ -99,6 +99,7 @@ def get_baseQ(qstr):
         return None
 
 def create_empty_table(table_name):
+    from config import GetPassword    
     try:
         key, gd_client = get_spreadsheet_key(table_name)
         print >> sys.stderr, 'table %s exists, skip' % table_name
@@ -109,7 +110,7 @@ def create_empty_table(table_name):
         client.ssl = True  # Force all API requests through HTTPS
         client.http_client.debug = False  # Set to True for debugging HTTP requests
         
-        client.ClientLogin(EMAIL,PASS,client.source)
+        client.ClientLogin(EMAIL,GetPassword(),client.source)
         
         new_spreadsheet = client.Create(gdata.docs.data.SPREADSHEET_LABEL, table_name , writers_can_invite=False)
         print >> sys.stderr, 'Spreadsheet "%s" created' % new_spreadsheet.title.text
@@ -117,11 +118,12 @@ def create_empty_table(table_name):
 
 def get_spreadsheet_key(target_sheet,gd_client=None):
     '''returns the key string for a spreadsheet given its name'''
+    from config import GetPassword
 
     if gd_client is None:
         gd_client = gdata.spreadsheet.service.SpreadsheetsService()
         gd_client.email = EMAIL
-        gd_client.password = PASS
+        gd_client.password = GetPassword()
         gd_client.source = SOURCE
 
     gd_client.ProgrammaticLogin()
